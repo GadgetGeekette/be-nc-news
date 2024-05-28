@@ -1,8 +1,12 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+---
 
+1) SETUP LOCAL DATABASES - Create two .env files: .env.test and .env.development. Add PGDATABASE=nc_news_test to the test file and PGDATABASE=nc_news to the development file. Ensure that these .env files are .gitignored.
 
+2) CREATE DATABASES: run the db/setup.sql file: npm run setup-dbs.
+
+3) SET ENVIRONMENT VARIABLES - run the connection file: node db/connection.js.
 
 --- 
 
