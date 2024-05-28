@@ -1,0 +1,16 @@
+[Tue May 28 2024 11:37:34 GMT+0100 (British Summer Time)] ERROR Error: ENOENT: no such file or directory, open './config/app.yml'
+    at Object.readFileSync (node:fs:455:20)
+    at Object.readConfig (/home/nina/Documents/Northcoders/Projects/be-nc-news/node_modules/yaml-config/lib/yaml-config.js:57:25)
+    at Object.<anonymous> (/home/nina/Documents/Northcoders/Projects/be-nc-news/node_modules/psql/lib/config.js:2:23)
+    at Module._compile (node:internal/modules/cjs/loader:1368:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1426:10)
+    at Module.load (node:internal/modules/cjs/loader:1205:32)
+    at Module._load (node:internal/modules/cjs/loader:1021:12)
+    at Module.require (node:internal/modules/cjs/loader:1230:19)
+    at require (node:internal/modules/helpers:179:18)
+    at Object.<anonymous> (/home/nina/Documents/Northcoders/Projects/be-nc-news/node_modules/psql/bin/psql.js:3:14) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: './config/app.yml'
+}
