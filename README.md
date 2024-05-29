@@ -6,6 +6,8 @@
 
 2) CREATE DATABASES: run the db/setup.sql file: npm run setup-dbs.
 
+3) SEED DEVELOPMENT DATABASE: run the db/run-seed.js file: npm run seed.
+
 --- 
 
 This portfolio project was created as part of a Digital Skills Bootcamp in Software Engineering provided by [Northcoders](https://northcoders.com/)
