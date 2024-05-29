@@ -26,7 +26,6 @@ app.use((err, req, res, next) => {
 
 // custom error
 app.use((err, req, res, next) => {
-    console.log(err, '--custom err')
     // if (err.status && err.msg){
     if (err.status){
         res.status(err.status).send({msg: err.msg});

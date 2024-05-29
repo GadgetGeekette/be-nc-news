@@ -52,7 +52,6 @@ describe('Get article comments', () => {
             .get('/api/articles/1/comments')
             .expect(200)
             .then(({body}) => {
-                console.log(body, '---comments body test')
                 expect(body.comments).toBeSortedBy('created_at', {descending: true});
             });
     });

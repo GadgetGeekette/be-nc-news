@@ -9,8 +9,6 @@ exports.getCommentsByArticle = ((req, res, next) => {
 
     Promise.all(promises)
         .then((results) => {
-            console.log(results[0],'--promise article results')
-            console.log(results[1],'--promise comments results')
             res.status(200).send({comments: results[1]});
         })
         .catch(next);
