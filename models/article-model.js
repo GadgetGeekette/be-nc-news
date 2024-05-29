@@ -18,4 +18,21 @@ exports.getArticleByIdQuery = ((id, next) => {
     });
 })
 
+exports.getArticlesQuery = ((next) => {
+    return db.query(
+        `SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, count(c.article_id) as comment_count
+            FROM articles a
+            JOIN comments c
+                ON a.article_id = c.article_id
+            GROUP BY a.article_id;`)
+    .then(({rows}) =>{
+        rows.map((row) => {
+            row.comment_count = Number(row.comment_count);
+        })
+        return rows;
+    })
+    .catch((err) => {
+        next(err);
+    });
+})
 
