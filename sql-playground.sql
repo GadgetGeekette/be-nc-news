@@ -19,3 +19,10 @@ SELECT * FROM comments;
 SELECT * FROM topics;
 \echo '\n users: \n'
 SELECT * FROM users;
+
+-- \echo '\n articles with comment count: \n'
+-- SELECT *, c.article_id
+--         FROM articles a
+--         JOIN comments c
+--             ON a.article_id = c.article_id
+--         GROUP BY c.article_id, a.article_id

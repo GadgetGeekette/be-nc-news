@@ -6,8 +6,6 @@
 
 2) CREATE DATABASES: run the db/setup.sql file: npm run setup-dbs.
 
-3) SET ENVIRONMENT VARIABLES - run the connection file: node db/connection.js.
-
 --- 
 
 This portfolio project was created as part of a Digital Skills Bootcamp in Software Engineering provided by [Northcoders](https://northcoders.com/)
