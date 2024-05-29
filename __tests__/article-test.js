@@ -7,8 +7,8 @@ const app = require('../app');
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe.only('Get article by ID', () => {
-    it.only('Returns correct article', () => {
+describe('Get article by ID', () => {
+    it('Returns correct article', () => {
         return request(app)
             .get('/api/articles/3')
             .expect(200)
@@ -39,6 +39,36 @@ describe.only('Get article by ID', () => {
             .expect(400)
             .then(({body}) => {
                 expect(body.msg).toEqual('Bad request');
+            });
+    });
+});
+
+describe('Get articles', () => {
+    it('Returns correct number of articles', () => {
+        return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then(({body}) => {
+                expect(body.articles).toHaveLength(5);
+            });
+    });
+    it('Returns articles in the correct format', () => {
+        return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then(({body}) => {
+                body.articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        article_id: expect.any(Number),
+                        title: expect.any(String),
+                        topic: expect.any(String),
+                        author: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        article_img_url: expect.any(String),
+                        comment_count: expect.any(Number)
+                    })
+                });
             });
     });
 });

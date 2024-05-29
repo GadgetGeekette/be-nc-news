@@ -20,9 +20,9 @@ SELECT * FROM topics;
 \echo '\n users: \n'
 SELECT * FROM users;
 
--- \echo '\n articles with comment count: \n'
--- SELECT *, c.article_id
---         FROM articles a
---         JOIN comments c
---             ON a.article_id = c.article_id
---         GROUP BY c.article_id, a.article_id
+\echo '\n articles with comment count: \n'
+SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, count(a.article_id) as comment_count
+    FROM articles a
+    JOIN comments c
+        ON a.article_id = c.article_id
+    GROUP BY a.article_id;
