@@ -55,5 +55,23 @@
         "article_id": 6
       }
     }]
+  },
+  "POST /api/articles/:id/comments": {
+    "description": "adds a comments for the specified article",
+    "queries": ["id"],
+    "exampleBody": {
+        "username": "icellusedkars",
+        "body": "Oh promise all - my favourite!"
+    },
+    "exampleResponse": [{
+      "article": {
+        "comment_id": 16,
+        "votes": 1,
+        "created_at": "2020-10-11 16:23:00",
+        "author": "butter_bridge",
+        "body": "This is a bad article name",
+        "article_id": 6
+      }
+    }]
   }
 }
