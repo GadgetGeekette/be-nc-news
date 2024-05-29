@@ -56,3 +56,64 @@ describe('Get article comments', () => {
             });
     });
 });
+
+describe('Post comments', () => {
+    it('Correctly adds a comment', () => {
+        const comment = {
+            username: 'icellusedkars',
+            body: 'Oh promise all - my favourite!'
+        }
+        return request(app)
+            .post('/api/articles/7/comments')
+            .send(comment)
+            .expect(201)
+            .then(({body}) => {
+                expect(body.comment).toEqual({
+                    comment_id: 19,
+                    votes: 0,
+                    created_at: expect.any(String),
+                    author: 'icellusedkars',
+                    body: 'Oh promise all - my favourite!',
+                    article_id: 7
+                });
+            });
+    });
+    it('Returns 400 bad request when missing comment data', () => {
+        const comment = {
+            username: 'icellusedkars'
+        }
+        return request(app)
+            .post('/api/articles/7/comments')
+            .send(comment)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Bad request');
+            });
+    });
+    it('Returns 404 not found for a non existent but valid article ID', () => {
+        const comment = {
+            username: 'icellusedkars',
+            body: 'Oh promise all - my favourite!'
+        }
+        return request(app)
+            .post('/api/articles/777/comments')
+            .send(comment)
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Not found');
+            });
+    });
+    it('Returns 400 bad request for an invalid article ID', () => {
+        const comment = {
+            username: 'icellusedkars',
+            body: 'Oh promise all - my favourite!'
+        }
+        return request(app)
+            .post('/api/articles/floof/comments')
+            .send(comment)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Bad request');
+            });
+    });
+});

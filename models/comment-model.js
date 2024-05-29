@@ -18,3 +18,17 @@ exports.getCommentsByArticleQuery = ((id, next) => {
             next(err);
         });    
 });
+
+exports.postCommentQuery = (body, id, username, next) => {
+    return db.query(
+        `INSERT INTO comments (body, article_id, author, votes, created_at)
+        SELECT $1, $2, $3, 0, NOW()
+        RETURNING *;`, [body, Number(id), username])
+
+    .then(({rows}) => {
+        return rows[0];
+    })
+    .catch((err) =>{
+        next(err);
+    });
+};

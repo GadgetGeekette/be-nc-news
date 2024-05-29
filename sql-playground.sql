@@ -32,3 +32,42 @@ SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.articl
 SELECT c.comment_id, c.votes, c.created_at, c.author, c.body, c.article_id
     FROM comments c
     WHERE article_id = 6;
+
+\echo '\n add new comment: \n'
+INSERT INTO comments AS c (body, article_id, author, votes, created_at)
+    SELECT 'my test data', a.article_id, a.author, 0, NOW()
+        FROM articles a
+    WHERE a.article_id = 7;
+
+\echo '\n updated comments: \n'
+SELECT * FROM comments;
+
+
+-- exports.postCommentQuery = (comment, next) => {
+--     return db.query(
+--         `INSERT INTO comments AS c (body, article_id, author, votes, created_at)
+--         SELECT $1, a.article_id, a.author, 0, NOW()
+--             FROM articles a
+--         WHERE a.article_id = $2;`, [comment.body, comment.id])
+--     .catch(next);
+-- };
+    
+    -- RETURNING *;
+
+-- -- *** SINGLE INSERT EXAMPLE ***:
+-- INSERT INTO item_tags (item_id, tag_id)
+-- SELECT p.item_id, t.id
+-- FROM  (SELECT item_id FROM properties WHERE name LIKE 'body') p
+--     , (SELECT id FROM tags WHERE name ILIKE '%hoax%') t
+
+-- -- *** BULK INSERT EXAMPLE ***:
+-- INSERT INTO item_tags (item_id, tag_id)
+-- SELECT p.item_id, t.id
+-- FROM  (
+--    VALUES
+--       ('body',  'hoax')
+--     , ('body2', 'fun')
+--     , ('body3', 'love')
+--   ) AS it(item, tag)
+-- JOIN   properties p ON p.name LIKE it.item
+-- JOIN   tags t ON t.name ILIKE ('%' || it.tag ||'%');
