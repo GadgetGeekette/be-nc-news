@@ -16,7 +16,7 @@ exports.getArticleByIdQuery = ((id, next) => {
     .catch((err) => {
         next(err);
     });
-})
+});
 
 exports.getArticlesQuery = ((next) => {
     return db.query(
@@ -35,5 +35,4 @@ exports.getArticlesQuery = ((next) => {
     .catch((err) => {
         next(err);
     });
-})
-
+});
