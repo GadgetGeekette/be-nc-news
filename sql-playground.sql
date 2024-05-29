@@ -25,4 +25,10 @@ SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.articl
     FROM articles a
     JOIN comments c
         ON a.article_id = c.article_id
-    GROUP BY a.article_id;
+    GROUP BY a.article_id
+    ORDER BY a.created_at DESC;
+
+\echo '\n article 6 comments: \n'
+SELECT c.comment_id, c.votes, c.created_at, c.author, c.body, c.article_id
+    FROM comments c
+    WHERE article_id = 6;
