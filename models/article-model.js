@@ -36,3 +36,31 @@ exports.getArticlesQuery = ((next) => {
         next(err);
     });
 });
+
+exports.patchArticleQuery = ((id, inc_votes, next) => {
+    return db.query(
+        `UPDATE articles
+            SET votes = (
+                CASE
+                    WHEN votes + $1 < 0 THEN 0
+                    ELSE votes + $1
+                END
+            )
+            WHERE article_id = $2
+            RETURNING *;`, [inc_votes, id])
+
+    .then(({rows}) => {
+        if (rows.length === 0) {
+            return Promise.reject({status: 404, msg: 'Not found'});
+        }
+        
+        // format date
+        rows[0].created_at = moment(new Date(rows[0].created_at)).format('YYYY-MM-DD HH:mm:ss');
+        return rows[0];
+    })
+    .catch((err) => {
+        next(err);
+    });
+});
+
+
