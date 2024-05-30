@@ -1,4 +1,4 @@
-const {getCommentsByArticleQuery, postCommentQuery} = require('../models/comment-model');
+const {getCommentsByArticleQuery, postCommentQuery, deleteCommentQuery} = require('../models/comment-model');
 const {getArticleByIdQuery} = require('../models/article-model');
 
 exports.getCommentsByArticle = ((req, res, next) => {
@@ -31,4 +31,14 @@ exports.postComment = (req, res, next) => {
         .catch((err) => {
             next(err);
         });;
-  };
+};
+
+exports.deleteComment = (req, res, next) => {
+    return deleteCommentQuery(req.params.id, next)
+        .then((result) => {
+            res.status(204).send();
+        })
+        .catch((err) => {
+            next(err);
+        });;
+};

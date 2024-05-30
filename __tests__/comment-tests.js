@@ -57,7 +57,7 @@ describe('Get article comments', () => {
     });
 });
 
-describe.only('Post comments', () => {
+describe.only('Post comment', () => {
     it('Correctly adds a comment', () => {
         const comment = {
             username: 'icellusedkars',
@@ -124,6 +124,34 @@ describe.only('Post comments', () => {
         return request(app)
             .post('/api/articles/7/comments')
             .send(comment)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Bad request');
+            });
+    });
+});
+
+describe.only('Delete comment', () => {
+    it('Deletes a comment successfully', () => {
+        return request(app)
+            .delete('/api/comments/16')
+            .expect(204)
+            .then(({body}) => {
+                expect(body).toEqual({});
+                //expect
+            });
+    });
+    it('Returns 404 not found for a non existent but valid comment ID', () => {
+        return request(app)
+            .delete('/api/comments/888')
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Not found');
+            });
+    });
+    it('Returns 400 bad request for an invalid comment ID', () => {
+        return request(app)
+            .delete('/api/comments/puppies')
             .expect(400)
             .then(({body}) => {
                 expect(body.msg).toEqual('Bad request');
