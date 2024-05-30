@@ -57,7 +57,7 @@ describe('Get article comments', () => {
     });
 });
 
-describe.only('Post comment', () => {
+describe('Post comment', () => {
     it('Correctly adds a comment', () => {
         const comment = {
             username: 'icellusedkars',
@@ -116,7 +116,7 @@ describe.only('Post comment', () => {
                 expect(body.msg).toEqual('Bad request');
             });
     });
-    it.only('Returns 400 bad request for an invalid author', () => {
+    it('Returns 400 bad request for an invalid author', () => {
         const comment = {
             username: 'buster-move',
             body: 'Oh promise all - my favourite!'
@@ -131,7 +131,7 @@ describe.only('Post comment', () => {
     });
 });
 
-describe.only('Delete comment', () => {
+describe('Delete comment', () => {
     it('Deletes a comment successfully', () => {
         return request(app)
             .delete('/api/comments/16')
