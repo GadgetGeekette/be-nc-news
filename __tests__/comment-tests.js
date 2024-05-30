@@ -34,7 +34,7 @@ describe('Get article comments', () => {
     it('Returns 404 not found for valid but non existent ID', () => {
         return request(app)
             .get('/api/articles/777/comments')
-            //.expect(404)
+            .expect(404)
             .then(({body}) => {
                 expect(body.msg).toEqual('Not found');
             });
@@ -158,3 +158,4 @@ describe('Delete comment', () => {
             });
     });
 });
+

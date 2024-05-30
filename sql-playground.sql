@@ -76,6 +76,22 @@ SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.articl
 --         GROUP BY a.article_id
 --         ORDER BY a.created_at DESC;
 
+\echo '\n article by id with comment count: \n'
+SELECT a.article_id, a.title, a.topic, a.author, a.body, a.created_at, a.votes, a.article_img_url, count(a.article_id) as comment_count
+    FROM articles a
+    JOIN comments c
+        ON a.article_id = c.article_id
+    WHERE a.article_id = 3
+    GROUP BY a.article_id;
+
+\echo '\n article by id with comment count and cast: \n'
+SELECT a.article_id, a.title, a.topic, a.author, a.body, a.created_at, a.votes, a.article_img_url, CAST(COUNT(a.article_id) AS INTEGER) AS comment_count
+        FROM articles a
+        JOIN comments c
+            ON a.article_id = c.article_id
+        WHERE a.article_id = 3
+        GROUP BY a.article_id;
+
 \echo '\n articles with comment count: \n'
 SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, count(a.article_id) as comment_count
     FROM articles a
@@ -97,3 +113,4 @@ INSERT INTO comments AS c (body, article_id, author, votes, created_at)
 
 \echo '\n updated comments: \n'
 SELECT * FROM comments;
+

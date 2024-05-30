@@ -3,6 +3,7 @@ const request = require('supertest');
 const testData = require('../db/data/test-data');
 const seed = require('../db/seeds/seed');
 const app = require('../app');
+const {articleExists} = require('../models/article-model')
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -21,7 +22,8 @@ describe('Get article by ID', () => {
                     body: 'some gifs',
                     created_at: '2020-11-03 09:12:00',
                     votes: 0,
-                    article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+                    article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+                    comment_count: 2
                 });
             });
     });
@@ -196,4 +198,5 @@ describe('Get articles by topic', () => {
             });
     });
 });
+
 
