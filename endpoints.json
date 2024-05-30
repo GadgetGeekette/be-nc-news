@@ -92,5 +92,10 @@
         "article_id": 6
       }
     }]
+  },
+  "DELETE /api/comments/:id": {
+    "description": "deletes the specified comment",
+    "queries": ["id"],
+    "exampleResponse": [{}]
   }
 }

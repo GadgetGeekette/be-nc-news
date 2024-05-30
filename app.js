@@ -3,13 +3,13 @@ const express = require('express');
 const {getTopics} = require('./controllers/topic-controller');
 const {getApiData} = require('./controllers/core-api-controller');
 const {getArticles, getArticleById, patchArticle} = require('./controllers/article-controller');
-const {getCommentsByArticle, postComment} = require('./controllers/comment-controller');
+const {getCommentsByArticle, postComment, deleteComment} = require('./controllers/comment-controller');
 
 const app = express();
 app.use(express.json());
 
-app.get('/api/topics', getTopics);
 app.get('/api', getApiData);
+app.get('/api/topics', getTopics);
 app.get('/api/articles', getArticles);
 app.get('/api/articles/:id', getArticleById);
 app.get('/api/articles/:id/comments', getCommentsByArticle);
@@ -17,6 +17,8 @@ app.get('/api/articles/:id/comments', getCommentsByArticle);
 app.post('/api/articles/:id/comments', postComment);
 
 app.patch('/api/articles/:id', patchArticle);
+
+app.delete('/api/comments/:id', deleteComment);
 
 // psql error
 app.use((err, req, res, next) => {
