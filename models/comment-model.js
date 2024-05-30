@@ -30,7 +30,10 @@ exports.postCommentQuery = (body, id, username, next) => {
     })
     
     .catch((err) =>{
-        if (err.detail.includes('is not present in table "users"')) {
+        if (err.detail.includes('is not present in table "articles"')) {
+            return Promise.reject({status: 404, msg: 'Not found'});
+        }
+        else if (err.detail.includes('is not present in table "users"')) {
             return Promise.reject({status: 400, msg: 'Bad request'});
         };
         next(err);

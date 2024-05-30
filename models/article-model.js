@@ -1,12 +1,29 @@
 const db = require('../db/connection');
 const moment = require('moment');
 
-exports.getArticleByIdQuery = ((id, next) => {
-    return db.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
+exports.getArticleByIdQuery = ((id, next) => {   
+    return db.query(`SELECT a.article_id, a.title, a.topic, a.author, a.body, a.created_at, a.votes, a.article_img_url, CAST(COUNT(a.article_id) AS INTEGER) AS comment_count
+        FROM articles a
+        JOIN comments c
+            ON a.article_id = c.article_id
+        WHERE a.article_id = $1
+        GROUP BY a.article_id;`, [id])
+
     .then((results) =>{
         if (results.rowCount === 0) {
-            return Promise.reject({status: 404, msg: 'Not found'});
+            return this.articleExists(id)
+            .then((exists) => {
+                if (exists) {
+                    // valid article with no comments
+                    return [];
+                }
+                else {
+                    // invalid article
+                    return Promise.reject({status: 404, msg: 'Not found'});
+                }
+            });
         }
+
         // format created_at date
         let article = results.rows[0];
         const createdAt = moment(new Date(article.created_at)).format('YYYY-MM-DD HH:mm:ss');
@@ -18,10 +35,28 @@ exports.getArticleByIdQuery = ((id, next) => {
     });
 });
 
+exports.articleExists = ((id, next) => {
+    return db.query(`SELECT article_id
+        FROM articles a
+        WHERE article_id = $1;`, [id])
+
+    .then(({rows}) =>{
+        if (rows.length > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    })
+    .catch((err) => {
+        next(err);
+    });
+});
+
 exports.getArticlesQuery = ((next, topic='') => {
     if (topic) {
         // articles filtered by topic
-        return db.query(`SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, count(c.article_id) as comment_count
+        return db.query(`SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, COUNT(c.article_id) AS comment_count
         FROM articles a
         JOIN comments c
             ON a.article_id = c.article_id
@@ -55,6 +90,9 @@ exports.getArticlesQuery = ((next, topic='') => {
             return rows;
         })
         .catch((err) => {
+            if (err.detail.includes('is not present in table "articles"')) {
+                return Promise.reject({status: 404, msg: 'Not found'});
+            };
             next(err);
         });
     };
