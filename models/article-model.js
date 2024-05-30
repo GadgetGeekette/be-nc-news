@@ -18,23 +18,46 @@ exports.getArticleByIdQuery = ((id, next) => {
     });
 });
 
-exports.getArticlesQuery = ((next) => {
-    return db.query(
-        `SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, count(c.article_id) as comment_count
-            FROM articles a
-            JOIN comments c
-                ON a.article_id = c.article_id
-            GROUP BY a.article_id
-            ORDER BY a.created_at DESC;`)
-    .then(({rows}) =>{
-        rows.map((row) => {
-            row.comment_count = Number(row.comment_count);
+exports.getArticlesQuery = ((next, topic='') => {
+    if (topic) {
+        // articles filtered by topic
+        return db.query(`SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, count(c.article_id) as comment_count
+        FROM articles a
+        JOIN comments c
+            ON a.article_id = c.article_id
+        WHERE a.topic = $1
+        GROUP BY a.article_id
+        ORDER BY a.created_at DESC;`, [topic])
+
+        .then(({rows}) =>{
+            rows.map((row) => {
+                row.comment_count = Number(row.comment_count);
+            })
+            return rows;
         })
-        return rows;
-    })
-    .catch((err) => {
-        next(err);
-    });
+        .catch((err) => {
+            next(err);
+        });
+    }
+    else {
+        // articles not filtered by topic
+        return db.query(`SELECT a.article_id, a.title, a.topic, a.author, a.    created_at, a.votes, a.article_img_url, count(c.article_id) as comment_count
+        FROM articles a
+        JOIN comments c
+            ON a.article_id = c.article_id
+        GROUP BY a.article_id
+        ORDER BY a.created_at DESC;`)
+
+        .then(({rows}) =>{
+            rows.map((row) => {
+                row.comment_count = Number(row.comment_count);
+            })
+            return rows;
+        })
+        .catch((err) => {
+            next(err);
+        });
+    };
 });
 
 exports.patchArticleQuery = ((id, inc_votes, next) => {

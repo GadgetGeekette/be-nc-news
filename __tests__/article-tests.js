@@ -74,7 +74,7 @@ describe('Get articles', () => {
     });
 });
 
-describe.only('Patch article', () => {
+describe('Patch article', () => {
     it("Correctly increments an article's votes", () => {
         const updateData = { inc_votes: 10 };
         return request(app)
@@ -132,7 +132,7 @@ describe.only('Patch article', () => {
                 });
             });
     });
-    it.only('Returns 404 not found for a non existent but valid article ID', () => {
+    it('Returns 404 not found for a non existent but valid article ID', () => {
         const updateData = { inc_votes: 12 };
         return request(app)
             .patch('/api/articles/999')
@@ -142,7 +142,7 @@ describe.only('Patch article', () => {
                 expect(body.msg).toEqual('Not found');
             });
     });
-    it.only('Returns 400 bad request for an invalid article ID', () => {
+    it('Returns 400 bad request for an invalid article ID', () => {
         const updateData = { inc_votes: 7 };
         return request(app)
             .patch('/api/articles/cabbage')
@@ -154,4 +154,46 @@ describe.only('Patch article', () => {
     });
 });
 
+describe('Get articles by topic', () => {
+    it('Returns all articles when empty topic is passed', () => {
+        const topic = {topic: ''};
+        return request(app)
+            .get('/api/articles')
+            .send(topic)
+            .expect(200)
+            .then(({body}) => {
+                expect(body.articles).toHaveLength(5);
+            });
+    });
+    it('Returns the correct number of articles when topic is passed', () => {
+        const topic = {topic: 'mitch'};
+        return request(app)
+            .get('/api/articles')
+            .send(topic)
+            .expect(200)
+            .then(({body}) => {
+                expect(body.articles).toHaveLength(4);
+            });
+    });
+    it('Returns 404 not found for a non existent but valid topic', () => {
+        const topic = {topic: 'blue-skies'};
+        return request(app)
+            .get('/api/articles')
+            .send(topic)
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Not found');
+            });
+    });
+    it('Returns 400 bad request for an invalid topic', () => {
+        const topic = {topic: 999};
+        return request(app)
+            .get('/api/articles')
+            .send(topic)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Bad request');
+            });
+    });
+});
 

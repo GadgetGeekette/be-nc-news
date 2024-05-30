@@ -20,28 +20,6 @@ SELECT * FROM topics;
 \echo '\n users: \n'
 SELECT * FROM users;
 
-\echo '\n articles with comment count: \n'
-SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, count(a.article_id) as comment_count
-    FROM articles a
-    JOIN comments c
-        ON a.article_id = c.article_id
-    GROUP BY a.article_id
-    ORDER BY a.created_at DESC;
-
-\echo '\n article 6 comments: \n'
-SELECT c.comment_id, c.votes, c.created_at, c.author, c.body, c.article_id
-    FROM comments c
-    WHERE article_id = 6;
-
-\echo '\n add new comment: \n'
-INSERT INTO comments AS c (body, article_id, author, votes, created_at)
-    SELECT 'my test data', a.article_id, a.author, 0, NOW()
-        FROM articles a
-    WHERE a.article_id = 7;
-
-\echo '\n updated comments: \n'
-SELECT * FROM comments;
-
 
 -- exports.postCommentQuery = (comment, next) => {
 --     return db.query(
@@ -72,3 +50,50 @@ SELECT * FROM comments;
 -- JOIN   properties p ON p.name LIKE it.item
 -- JOIN   tags t ON t.name ILIKE ('%' || it.tag ||'%');
 
+\echo '\n articles filtered by topic mitch: \n'
+SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, count(c.article_id) as comment_count
+        FROM articles a
+        JOIN comments c
+            ON a.article_id = c.article_id
+        WHERE a.topic = 'mitch'
+        GROUP BY a.article_id
+        ORDER BY a.created_at DESC;
+
+\echo '\n articles filtered by no topic: \n'
+SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url,count(c.article_id) AS comment_count
+        FROM articles a
+        JOIN comments c
+            ON a.article_id = c.article_id
+        GROUP BY a.article_id
+        ORDER BY a.created_at DESC;
+
+--how to do cast???
+-- \echo '\n articles filtered by no topic: \n'
+-- SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, CAST(count(c.article_id) AS comment_count AS integer)
+--         FROM articles a
+--         JOIN comments c
+--             ON a.article_id = c.article_id
+--         GROUP BY a.article_id
+--         ORDER BY a.created_at DESC;
+
+\echo '\n articles with comment count: \n'
+SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, count(a.article_id) as comment_count
+    FROM articles a
+    JOIN comments c
+        ON a.article_id = c.article_id
+    GROUP BY a.article_id
+    ORDER BY a.created_at DESC;
+
+\echo '\n article 6 comments: \n'
+SELECT c.comment_id, c.votes, c.created_at, c.author, c.body, c.article_id
+    FROM comments c
+    WHERE article_id = 6;
+
+\echo '\n add new comment: \n'
+INSERT INTO comments AS c (body, article_id, author, votes, created_at)
+    SELECT 'my test data', a.article_id, a.author, 0, NOW()
+        FROM articles a
+    WHERE a.article_id = 7;
+
+\echo '\n updated comments: \n'
+SELECT * FROM comments;
