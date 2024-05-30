@@ -10,7 +10,10 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles in descending date order",
+    "description": "serves an array of all articles in descending date order, optionally filtered by topic",
+    "exampleBody": {
+      "topic": "mitch"
+    },
     "exampleResponse": {
       "articles": [
         {
