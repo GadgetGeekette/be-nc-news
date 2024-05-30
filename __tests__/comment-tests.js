@@ -57,7 +57,7 @@ describe('Get article comments', () => {
     });
 });
 
-describe('Post comments', () => {
+describe.only('Post comments', () => {
     it('Correctly adds a comment', () => {
         const comment = {
             username: 'icellusedkars',
@@ -110,6 +110,19 @@ describe('Post comments', () => {
         }
         return request(app)
             .post('/api/articles/floof/comments')
+            .send(comment)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Bad request');
+            });
+    });
+    it.only('Returns 400 bad request for an invalid author', () => {
+        const comment = {
+            username: 'buster-move',
+            body: 'Oh promise all - my favourite!'
+        }
+        return request(app)
+            .post('/api/articles/7/comments')
             .send(comment)
             .expect(400)
             .then(({body}) => {

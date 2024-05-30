@@ -9,8 +9,8 @@ exports.getCommentsByArticleQuery = ((id, next) => {
         ORDER BY created_at DESC;`, [id])
         
         .then(({rows}) => {
-            rows.map((article) => {
-                article.created_at = moment(new Date(article.created_at)).format('YYYY-MM-DD HH:mm:ss');
+            rows.map((comment) => {
+                comment.created_at = moment(new Date(comment.created_at)).format('YYYY-MM-DD HH:mm:ss');
             });
             return rows;
         })
@@ -28,7 +28,11 @@ exports.postCommentQuery = (body, id, username, next) => {
     .then(({rows}) => {
         return rows[0];
     })
+    
     .catch((err) =>{
+        if (err.detail.includes('is not present in table "users"')) {
+            return Promise.reject({status: 400, msg: 'Bad request'});
+        };
         next(err);
     });
 };
