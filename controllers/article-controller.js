@@ -20,7 +20,6 @@ exports.getArticles = ((req, res, next) => {
     }
     else if (topic  && topic !== '') {
         // filtered by topic
-        promises.push(getTopic(topic, next));
         promises.push(getArticlesQuery(next, topic));
     }
     else {
@@ -30,14 +29,11 @@ exports.getArticles = ((req, res, next) => {
 
     Promise.all(promises)
         .then((result) => {
-            if (topic) {
-                // filtered by topic
-                res.status(200).send({articles: result[1]});
+            if (topic && result[0].length === 0) {
+                // topic does not exist
+                res.status(404).send({msg: 'Not found'});
             }
-            else {
-                // not filtered by topic
-                res.status(200).send({articles: result[0]});
-            }
+            res.status(200).send({articles: result[0]});
         })
         .catch((err) => {
             next(err);

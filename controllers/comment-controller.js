@@ -3,6 +3,7 @@ const {getArticleByIdQuery} = require('../models/article-model');
 
 exports.getCommentsByArticle = ((req, res, next) => {
     const promises = [
+        // separate queries required to enable differentiation between zero rows returned because the article ID doesn't exist and zero rows returned because the article has no comments
         getArticleByIdQuery(req.params.id, next),
         getCommentsByArticleQuery(req.params.id, next)
     ];
@@ -19,18 +20,17 @@ exports.postComment = (req, res, next) => {
         return res.status(400).send({msg: 'Bad request'})
     }
 
-    const promises = [
-        getArticleByIdQuery(req.params.id, next),
-        postCommentQuery(req.body.body, req.params.id, req.body.username, next)
-    ];
-
-    Promise.all(promises)
+    return postCommentQuery(req.body.body, req.params.id, req.body.username, next)
         .then((result) => {
-            res.status(201).send({comment: result[1]});
+            if (result.length === 0){
+                // invalid article ID
+                res.status(400).send({msg: 'Bad request'});
+            }
+            res.status(201).send({comment: result});
         })
         .catch((err) => {
             next(err);
-        });;
+        });     
 };
 
 exports.deleteComment = (req, res, next) => {
