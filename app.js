@@ -28,8 +28,8 @@ app.use((err, req, res, next) => {
 
 // custom error
 app.use((err, req, res, next) => {
-    // if (err.status && err.msg){
-    if (err.status){
+    if (err.status && err.msg){
+    //if (err.status){
         res.status(err.status).send({msg: err.msg});
     }
     else {
