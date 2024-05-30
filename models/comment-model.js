@@ -16,7 +16,7 @@ exports.getCommentsByArticleQuery = ((id, next) => {
         })
         .catch((err) => {
             next(err);
-        });    
+        });
 });
 
 exports.postCommentQuery = (body, id, username, next) => {
@@ -30,10 +30,10 @@ exports.postCommentQuery = (body, id, username, next) => {
     })
     
     .catch((err) =>{
-        if (err.detail.includes('is not present in table "articles"')) {
+        if (err.detail && err.detail.includes('is not present in table "articles"')) {
             return Promise.reject({status: 404, msg: 'Not found'});
         }
-        else if (err.detail.includes('is not present in table "users"')) {
+        else if (err.detail && err.detail.includes('is not present in table "users"')) {
             return Promise.reject({status: 400, msg: 'Bad request'});
         };
         next(err);
