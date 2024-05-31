@@ -107,4 +107,25 @@ exports.patchArticleQuery = ((id, inc_votes, next) => {
     });
 });
 
+exports.postArticleQuery = (article, next) => {
+    return db.query(
+        `INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url)
+        VALUEs ($1, $2, $3, $4, NOW(), 0, $5)
+        RETURNING *;`, [article.title, article.topic, article.author, article. body, article.article_img_url])
+
+    .then(({rows}) => {
+        return rows[0];
+    })
+    
+    .catch((err) =>{
+        if (err.detail 
+            && (err.detail.includes('is not present in table "users"') 
+            || err.detail.includes('is not present in table "topics"'))) {
+            return Promise.reject({status: 400, msg: 'Bad request'});
+        };
+        next(err);
+    });
+};
+
+
 

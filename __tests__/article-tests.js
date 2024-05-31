@@ -3,7 +3,6 @@ const request = require('supertest');
 const testData = require('../db/data/test-data');
 const seed = require('../db/seeds/seed');
 const app = require('../app');
-const {articleExists} = require('../models/article-model')
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -223,6 +222,158 @@ describe('Patch article', () => {
     });
 });
 
+describe('Post article', () => {
+    it('Correctly adds an article', () => {
+        const article = {
+            author: 'icellusedkars',
+            title: 'Floof faced fellas are all the rage',
+            body: 'Beards are in, clean shaven is out!',
+            topic: 'mitch',
+            article_img_url: 'https://images.pexels.com/photos/897262/pexels-photo-897262.jpeg'
+        }
+        return request(app)
+            .post('/api/articles')
+            .send(article)
+            .expect(201)
+            .then(({body}) => {
+                expect(body.article).toEqual({
+                    article_id: 14,
+                    title: 'Floof faced fellas are all the rage',
+                    topic: 'mitch',
+                    author: 'icellusedkars',
+                    body: 'Beards are in, clean shaven is out!',
+                    created_at: expect.any(String),
+                    votes: 0,
+                    article_img_url: 'https://images.pexels.com/photos/897262/pexels-photo-897262.jpeg',
+                    comment_count: 0
+                });
+            });
+    });
+    it('Returns 400 bad request when missing article data', () => {
+        return request(app)
+            .post('/api/articles')
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Bad request');
+            });
+    });
+    it('Returns 400 bad request when empty article passed', () => {
+        return request(app)
+            .post('/api/articles')
+            .send({})
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Bad request');
+            });
+    });
+    it('Returns 400 bad request when empty article missing author is passed', () => {
+        const article = {
+            title: 'Floof faced fellas are all the rage',
+            body: 'Beards are in, clean shaven is out!',
+            topic: 'mitch',
+            article_img_url: 'https://images.pexels.com/photos/897262/pexels-photo-897262.jpeg'
+        }
+        return request(app)
+            .post('/api/articles')
+            .send(article)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Bad request');
+            });
+    });
+    it('Returns 400 bad request when empty article missing title is passed', () => {
+        const article = {
+            author: 'icellusedkars',
+            body: 'Beards are in, clean shaven is out!',
+            topic: 'mitch',
+            article_img_url: 'https://images.pexels.com/photos/897262/pexels-photo-897262.jpeg'
+        }
+        return request(app)
+            .post('/api/articles')
+            .send(article)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Bad request');
+            });
+    });
+    it('Returns 400 bad request when empty article missing body is passed', () => {
+        const article = {
+            author: 'icellusedkars',
+            title: 'Floof faced fellas are all the rage',
+            topic: 'mitch',
+            article_img_url: 'https://images.pexels.com/photos/897262/pexels-photo-897262.jpeg'
+        }
+        return request(app)
+            .post('/api/articles')
+            .send(article)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Bad request');
+            });
+    });
+    it('Returns 400 bad request when empty article missing topic is passed', () => {
+        const article = {
+            author: 'icellusedkars',
+            title: 'Floof faced fellas are all the rage',
+            body: 'Beards are in, clean shaven is out!',
+            article_img_url: 'https://images.pexels.com/photos/897262/pexels-photo-897262.jpeg'
+        }
+        return request(app)
+            .post('/api/articles')
+            .send(article)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Bad request');
+            });
+    });
+    it('Returns 400 bad request when empty article missing article_img_url is passed', () => {
+        const article = {
+            author: 'icellusedkars',
+            title: 'Floof faced fellas are all the rage',
+            body: 'Beards are in, clean shaven is out!',
+            topic: 'mitch'
+        }
+        return request(app)
+            .post('/api/articles')
+            .send(article)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Bad request');
+            });
+    });
+    it('Returns 400 bad request for an invalid author', () => {
+        const article = {
+            author: 'scottish-charm',
+            title: 'Floof faced fellas are all the rage',
+            body: 'Beards are in, clean shaven is out!',
+            topic: 'mitch',
+            article_img_url: 'https://images.pexels.com/photos/897262/pexels-photo-897262.jpeg'
+        }
+        return request(app)
+            .post('/api/articles')
+            .send(article)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Bad request');
+            });
+    });
+    it('Returns 400 bad request for an invalid topic', () => {
+        const article = {
+            author: 'icellusedkars',
+            title: 'Floof faced fellas are all the rage',
+            body: 'Beards are in, clean shaven is out!',
+            topic: 'honey bees',
+            article_img_url: 'https://images.pexels.com/photos/897262/pexels-photo-897262.jpeg'
+        }
+        return request(app)
+            .post('/api/articles')
+            .send(article)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Bad request');
+            });
+    });
+});
 
 
 

@@ -2,7 +2,7 @@ const db = require('./db/connection');
 const express = require('express');
 const {getTopics} = require('./controllers/topic-controller');
 const {getApiData} = require('./controllers/core-api-controller');
-const {getArticles, getArticleById, patchArticle} = require('./controllers/article-controller');
+const {getArticles, getArticleById, patchArticle, postArticle} = require('./controllers/article-controller');
 const {getCommentsByArticle, postComment, deleteComment, patchComment} = require('./controllers/comment-controller');
 const {getUsers, getUser} = require('./controllers/user-controller');
 
@@ -18,6 +18,7 @@ app.get('/api/users', getUsers);
 app.get('/api/users/user', getUser);
 
 app.post('/api/articles/:id/comments', postComment);
+app.post('/api/articles', postArticle);
 
 app.patch('/api/articles/:id', patchArticle);
 app.patch('/api/comments/:id', patchComment);

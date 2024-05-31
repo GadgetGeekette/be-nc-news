@@ -1,4 +1,4 @@
-const {getArticleByIdQuery, getArticlesQuery, patchArticleQuery} = require('../models/article-model');
+const {getArticleByIdQuery, getArticlesQuery, patchArticleQuery, postArticleQuery} = require('../models/article-model');
 const { getTopic } = require('../models/topic-model');
 
 exports.getArticleById = (req, res, next) => {
@@ -63,4 +63,32 @@ exports.patchArticle = ((req, res, next) => {
             next(err);
         });
 });
+
+exports.postArticle = (req, res, next) => {
+    
+    if (!validArticlePostData(req.body)) {
+        return res.status(400).send({msg: 'Bad request'})
+    }
+
+    return postArticleQuery(req.body, next)
+        .then((result) => {
+            result.comment_count = 0;
+            res.status(201).send({article: result});
+        })
+        .catch((err) => {
+            next(err);
+        });     
+};
+
+function validArticlePostData (article) {
+    if (!article
+        || !article.author
+        || !article.title
+        || !article.body
+        || !article.topic
+        || !article.article_img_url) {
+            return false;
+        }
+    return true;
+};
 
