@@ -114,3 +114,5 @@ INSERT INTO comments AS c (body, article_id, author, votes, created_at)
 \echo '\n updated comments: \n'
 SELECT * FROM comments;
 
+\echo '\n users: \n'
+SELECT * FROM users;
