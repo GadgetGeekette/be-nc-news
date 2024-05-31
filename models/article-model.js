@@ -53,43 +53,32 @@ exports.articleExists = ((id, next) => {
     });
 });
 
-exports.getArticlesQuery = ((next, topic='') => {
+exports.getArticlesQuery = ((next, sort_by, order, topic = '') => {
+
+    let queryStr = `
+        SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, CAST(COUNT(a.article_id) AS INTEGER) AS comment_count
+            FROM articles a
+            JOIN comments c
+                ON a.article_id = c.article_id`;
+
     if (topic) {
-        // articles filtered by topic
-        return db.query(`SELECT a.article_id, a.title, a.topic, a.author, a.created_at, a.votes, a.article_img_url, CAST(COUNT(a.article_id) AS INTEGER) AS comment_count
-        FROM articles a
-        JOIN comments c
-            ON a.article_id = c.article_id
-        WHERE a.topic = $1
-        GROUP BY a.article_id
-        ORDER BY a.created_at DESC;`, [topic])
-
-        .then(({rows}) =>{
-            return rows;
-        })
-        .catch((err) => {
-            next(err);
-        });
+        queryStr += ` WHERE a.topic = '${topic}'`;
     }
-    else {
-        // articles not filtered by topic
-        return db.query(`SELECT a.article_id, a.title, a.topic, a.author, a.    created_at, a.votes, a.article_img_url, CAST(COUNT(a.article_id) AS INTEGER) AS comment_count
-        FROM articles a
-        JOIN comments c
-            ON a.article_id = c.article_id
-        GROUP BY a.article_id
-        ORDER BY a.created_at DESC;`)
 
+    queryStr += ` GROUP BY a.article_id
+        ORDER BY ${sort_by} ${order};`;
+
+    return db.query(queryStr)
         .then(({rows}) =>{
             return rows;
         })
         .catch((err) => {
-            if (err.detail.includes('is not present in table "articles"')) {
+            // article ID does not exist
+            if (err.detail && err.detail.includes('is not present in table "articles"')) {
                 return Promise.reject({status: 404, msg: 'Not found'});
             };
             next(err);
         });
-    };
 });
 
 exports.patchArticleQuery = ((id, inc_votes, next) => {
