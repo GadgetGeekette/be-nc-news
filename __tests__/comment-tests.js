@@ -159,3 +159,77 @@ describe('Delete comment', () => {
     });
 });
 
+describe('Patch comment', () => {
+    it("Correctly increments a comment's votes", () => {
+        const updateData = { inc_votes: 10 };
+        return request(app)
+            .patch('/api/comments/1')
+            .send(updateData)
+            .expect(200)
+            .then(({body}) => {
+                expect(body.comment).toEqual({
+                    comment_id: 1,
+                    body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                    article_id: 9,
+                    author: 'butter_bridge',
+                    votes: 26,
+                    created_at: '2020-04-06T12:17:00.000Z'
+                });
+            });
+    });
+    it("Correctly decreases a comment's votes", () => {
+        const updateData = { inc_votes: -5 };
+        return request(app)
+            .patch('/api/comments/1')
+            .send(updateData)
+            .expect(200)
+            .then(({body}) => {
+                expect(body.comment).toEqual({
+                    comment_id: 1,
+                    body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                    article_id: 9,
+                    author: 'butter_bridge',
+                    votes: 11,
+                    created_at: '2020-04-06T12:17:00.000Z'
+                });
+            });
+    });
+    it("Doesn't decrease a comment's votes below zero", () => {
+        const updateData = { inc_votes: -500 };
+        return request(app)
+            .patch('/api/comments/1')
+            .send(updateData)
+            .expect(200)
+            .then(({body}) => {
+                expect(body.comment).toEqual({
+                    comment_id: 1,
+                    body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                    article_id: 9,
+                    author: 'butter_bridge',
+                    votes: 0,
+                    created_at: '2020-04-06T12:17:00.000Z'
+                });
+            });
+    });
+    it('Returns 404 not found for a non existent but valid comment ID', () => {
+        const updateData = { inc_votes: 12 };
+        return request(app)
+            .patch('/api/comments/999')
+            .send(updateData)
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Not found');
+            });
+    });
+    it('Returns 400 bad request for an invalid comment ID', () => {
+        const updateData = { inc_votes: 7 };
+        return request(app)
+            .patch('/api/comments/cabbage')
+            .send(updateData)
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Bad request');
+            });
+    });
+});
+

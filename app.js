@@ -3,7 +3,7 @@ const express = require('express');
 const {getTopics} = require('./controllers/topic-controller');
 const {getApiData} = require('./controllers/core-api-controller');
 const {getArticles, getArticleById, patchArticle} = require('./controllers/article-controller');
-const {getCommentsByArticle, postComment, deleteComment} = require('./controllers/comment-controller');
+const {getCommentsByArticle, postComment, deleteComment, patchComment} = require('./controllers/comment-controller');
 const {getUsers, getUser} = require('./controllers/user-controller');
 
 const app = express();
@@ -20,6 +20,7 @@ app.get('/api/users/user', getUser);
 app.post('/api/articles/:id/comments', postComment);
 
 app.patch('/api/articles/:id', patchArticle);
+app.patch('/api/comments/:id', patchComment);
 
 app.delete('/api/comments/:id', deleteComment);
 
