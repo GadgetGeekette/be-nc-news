@@ -19,7 +19,7 @@ DESCRIPTION - a web service for displaying and updating Northcoders’ news upda
 
 6) RUN TESTS - the test database will automatically be seeded whenever you run tests. To run all jest tests use the CLI command: npm test 
 
-7) PRODUCTION - the hosted version can be found here: https://supabase.com/dashboard/project/wtsbwsccecmhhkenvypd
+7) PRODUCTION - the hosted version can be found here: https://nc-news-6bxb.onrender.com/
 
 8) SETUP PRODUCTION DATABASE - create a .gitignored file called .env.production and add DATABASE_URL set to the database access link on the hosted site. 
 
