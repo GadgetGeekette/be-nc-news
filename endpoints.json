@@ -107,6 +107,23 @@
       }
     }]
   },
+  "PATCH /api/comments/:id": {
+    "description": "increases or descrease a comment's votes",
+    "queries": ["id"],
+    "exampleBody": {
+        "inc_votes": -2
+    },
+    "exampleResponse": {
+      "comment": {
+          "comment_id": 1,
+          "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+          "article_id": 9,
+          "author": "butter_bridge",
+          "votes": 0,
+          "created_at": "2020-04-06T12:17:00.000Z"
+      }
+    }
+  },
   "DELETE /api/comments/:id": {
     "description": "deletes the specified comment",
     "queries": ["id"],

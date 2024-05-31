@@ -1,4 +1,4 @@
-const {getCommentsByArticleQuery, postCommentQuery, deleteCommentQuery} = require('../models/comment-model');
+const {getCommentsByArticleQuery, postCommentQuery, deleteCommentQuery, patchCommentQuery} = require('../models/comment-model');
 const {getArticleByIdQuery} = require('../models/article-model');
 
 exports.getCommentsByArticle = ((req, res, next) => {
@@ -42,3 +42,13 @@ exports.deleteComment = (req, res, next) => {
             next(err);
         });;
 };
+
+exports.patchComment = ((req, res, next) => {
+    return patchCommentQuery(req.params.id, req.body.inc_votes, next)
+        .then((result) => {
+            res.status(200).send({comment: result});
+        })
+        .catch((err) => {
+            next(err);
+        });
+});
