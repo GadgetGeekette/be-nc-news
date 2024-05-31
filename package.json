@@ -9,7 +9,8 @@
     "test": "jest --runInBand",
     "sql": "psql -f ./sql-playground.sql > ./sql-playground.txt",
     "start": "node listen.js",
-    "seed-prod": "NODE_ENV=production npm run seed"
+    "seed-prod": "NODE_ENV=production npm run seed",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -27,8 +28,7 @@
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
     "jest-sorted": "^1.0.15",
-    "supertest": "^7.0.0",
-    "prepare": "husky install"
+    "supertest": "^7.0.0"
   },
   "dependencies": {
     "dotenv": "^16.0.0",
