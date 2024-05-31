@@ -12,28 +12,42 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = ((req, res, next) => {
-    const topic = req.body.topic;
-    let promises = [];
 
-    if (topic && typeof topic !== 'string') {
-        res.status(400).send({msg: 'Bad request'})
-    }
-    else if (topic  && topic !== '') {
-        // filtered by topic
-        promises.push(getArticlesQuery(next, topic));
+    let sort_by;
+    let order;
+    let topic;
+
+    if (req.query.sort_by) {
+        sort_by = req.query.sort_by;
     }
     else {
-        // not filtered by topic
-        promises.push(getArticlesQuery(next))
-    }
+        // set default sort by
+        sort_by = 'created_at';
+    };
 
-    Promise.all(promises)
+    if (req.query.order) {
+        order = req.query.order;
+    }
+    else {
+        // set default order
+        order = 'DESC';
+    };
+
+    if (req.body.topic) {
+        if (typeof req.body.topic !== 'string') {
+            return res.status(400).send({msg: 'Bad request'})
+        }
+        topic = req.body.topic;
+    };
+
+    return getArticlesQuery(next, sort_by, order, topic)
+
         .then((result) => {
-            if (topic && result[0].length === 0) {
+            if (topic && result.length === 0) {
                 // topic does not exist
-                res.status(404).send({msg: 'Not found'});
+                return res.status(404).send({msg: 'Not found'});
             }
-            res.status(200).send({articles: result[0]});
+            res.status(200).send({articles: result});
         })
         .catch((err) => {
             next(err);
