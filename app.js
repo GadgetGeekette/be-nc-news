@@ -11,6 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// GET
 app.get('/api', getApiData);
 app.get('/api/topics', getTopics);
 app.get('/api/articles', getArticles);
@@ -19,12 +20,15 @@ app.get('/api/articles/:id/comments', getCommentsByArticle);
 app.get('/api/users', getUsers);
 app.get('/api/users/user', getUser);
 
+// POST
 app.post('/api/articles/:id/comments', postComment);
 app.post('/api/articles', postArticle);
 
+// PATCH
 app.patch('/api/articles/:id', patchArticle);
 app.patch('/api/comments/:id', patchComment);
 
+// DELETE
 app.delete('/api/comments/:id', deleteComment);
 
 // psql error

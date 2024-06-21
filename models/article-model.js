@@ -70,13 +70,12 @@ exports.getArticlesQuery = ((next, sort_by, order, topic = '') => {
 
     return db.query(queryStr)
         .then(({rows}) =>{
+            if (rows.length === 0) {
+                return Promise.reject({status: 404, msg: 'Not found'});
+            };
             return rows;
         })
         .catch((err) => {
-            // article ID does not exist
-            if (err.detail && err.detail.includes('is not present in table "articles"')) {
-                return Promise.reject({status: 404, msg: 'Not found'});
-            };
             next(err);
         });
 });

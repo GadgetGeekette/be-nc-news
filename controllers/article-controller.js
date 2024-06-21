@@ -33,11 +33,8 @@ exports.getArticles = ((req, res, next) => {
         order = 'DESC';
     };
 
-    if (req.body.topic) {
-        if (typeof req.body.topic !== 'string') {
-            return res.status(400).send({msg: 'Bad request'})
-        }
-        topic = req.body.topic;
+    if (req.query.topic) {
+        topic = req.query.topic;
     };
 
     return getArticlesQuery(next, sort_by, order, topic)

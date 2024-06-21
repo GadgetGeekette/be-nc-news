@@ -111,33 +111,19 @@ describe('Get articles by topic', () => {
             });
     });
     it('Returns the correct number of articles when topic is passed', () => {
-        const topic = {topic: 'mitch'};
         return request(app)
-            .get('/api/articles')
-            .send(topic)
+            .get('/api/articles?topic=mitch')
             .expect(200)
             .then(({body}) => {
                 expect(body.articles).toHaveLength(4);
             });
     });
-    it('Returns 404 not found for a non existent but valid topic', () => {
-        const topic = {topic: 'blue-skies'};
+    it('Returns 404 not found for an invalid/non-existent topic', () => {
         return request(app)
-            .get('/api/articles')
-            .send(topic)
+            .get('/api/articles?topic=999')
             .expect(404)
             .then(({body}) => {
                 expect(body.msg).toEqual('Not found');
-            });
-    });
-    it('Returns 400 bad request for an invalid topic', () => {
-        const topic = {topic: 999};
-        return request(app)
-            .get('/api/articles')
-            .send(topic)
-            .expect(400)
-            .then(({body}) => {
-                expect(body.msg).toEqual('Bad request');
             });
     });
 });
