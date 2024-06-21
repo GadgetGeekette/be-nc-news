@@ -4,12 +4,12 @@
 
 --- NC News --- 
 
-DESCRIPTION - a web service for displaying and updating Northcoders’ news updates, including articles, topics, comments and votes. 
+DESCRIPTION - a web service for Northcoders’ news updates and articles, including filtering by topics, adding comments and votes.
 
 
 1) CLONE REPOSITORY - on Github: https://github.com/GadgetGeekette/be-nc-news: Fork > Create a new fork > Create fork. From the Code dropdown copy the HTTPS URL. In a terminal enter: `git clone <forked_repo_url>` then `code <forked_repo_url>` to open the project.
 
-2) INSTALL DEPENDENCES - install add dependencies using the CLI command: `npm i`
+2) INSTALL DEPENDENCES - install all dependencies using the CLI command: `npm i`
 
 3) SETUP LOCAL DATABASES - create two .env files: .env.test and .env.development. Add PGDATABASE=nc_news_test to the test file and PGDATABASE=nc_news to the development file. Ensure that these .env files are .gitignored. 
 
